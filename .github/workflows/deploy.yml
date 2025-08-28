@@ -1,0 +1,61 @@
+name: Deploy via Cloud Build
+
+env:
+  PROJECT_ID: ${{vars.GCP_PROJECT_ID}}
+  PROJECT_NUMBER: ${{vars.GCP_PROJECT_NUMBER}}
+  WIF_PROVIDER: ${{vars.WIF_PROVIDER}}
+  DEPLOY_SA: ${{vars.DEPLOY_SA}}
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Print context
+        run: |
+          echo "GITHUB_REPOSITORY=${GITHUB_REPOSITORY}" 
+          echo "GITHUB_REF=${GITHUB_REF}" 
+          echo "GITHUB_REF_NAME=${GITHUB_REF_NAME}"
+      - name: Auth to Google Cloud (WIF)
+        uses: google-github-actions/auth@v2
+        with: 
+          # workload_identity_provider: projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          workload_identity_provider: ${{env.WIF_PROVIDER}}
+          service_account: ${{env.DEPLOY_SA}}
+      
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with: 
+          project_id: ${{env.PROJECT_ID}}
+      
+      - name: Who am I
+        run: |
+          gcloud auth list
+
+      - name: Submit Cloud Build
+        run: |
+          VERSION="$(date +%Y%m%d-%H%M)-${GITHUB_SHA::7}"
+          echo "Using Tag_NAME=$VERSION"
+          gcloud builds submit --config cloudbuild.yaml --substitutions=TAG_NAME="$VERSION" --verbosity=debug .
+      
+      - name: Get Cloud Run URL
+        run: |
+          URL=$(gcloud run services describe "${{vars.CLOUD_RUN_SERVICE}}" --region="${{vars.REGION}}" --format='value(status.url)')
+          echo "URL=$URL" >> "$GITHUB_ENV"
+          
+      - name: update Github About URL
+        if: env.URL!=''
+        env: 
+          GH_TOKEN: ${{secrets.GH_ADMIN_TOKEN}}
+        run: gh repo edit "${{github.repository}}" --homepage "${URL}"
