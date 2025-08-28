@@ -1,0 +1,40 @@
+## 使い方
+1. このテンプレートリポジトリから新規リポジトリを作成
+2. 下の書き換える設定一覧に従って変更
+3. streamlitのエントリポイントとしてapp.pyを作成する。
+4. actionsから手動実行するかmainへpushをすることで自動でデプロイが走ります。デプロイ先URLはgithubのabout欄に出力されます。
+
+## 書き換える設定
+
+### GCPプロジェクト単位
+1. cloudbuild.yaml
+``` yaml
+serviceAccount: projects/YOUR_PROJECT_ID/serviceAccounts/cb-deployer@YOUR_PROJECT_ID.iam.gserviceaccount.com
+
+substitutions: 
+  _REGION: YOUR_REGION
+
+```
+
+
+### GitHub Repository単位
+1. cloudbuild.yaml
+``` yaml
+substitutions: 
+  _SERVICE: YOUR_CLOUD_RUN_SERVICE_NAME
+  _REPO: YOUR_ARTIFACT_REPOSITORY_NAME
+```
+
+2. GitHub Variables
+``` yaml
+CLOUD_RUN_SERVICE: YOUR_CLOUD_RUN_SERVICE_NAME
+DEPLOY_SA: cb-deployer@YOUR_PROJECT_ID.iam.gserviceaccount.com
+PROJECT_ID: YOUR_PROJECT_ID
+PROJECT_NUMBER: YOUR_PROJECT_NUMBER
+REGION: YOUR_REGION
+WIF_PROVIDER: projects/YOUR_PROJECT_NUMBER/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+```
+3. GitHub Secrets
+``` yaml
+GH_ADMIN_TOKEN: YOUR_GITHUB_ACESS_TOKEN (used to update url in "About")
+```

@@ -1,0 +1,33 @@
+serviceAccount: projects/actions-mock-828/serviceAccounts/cb-deployer@actions-mock-828.iam.gserviceaccount.com
+
+steps:
+  - name: gcr.io/cloud-builders/docker 
+    args: ['build', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$TAG_NAME', '.']
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: bash
+    args: [-lc, 'gcloud artifacts repositories describe "${_REPO}" --location="${_REGION}" >/dev/null 2>&1 || gcloud artifacts repositories create "${_REPO}" --repository-format=docker --location="${_REGION}" --description="auto-created by Cloud Build"']
+
+  - name: gcr.io/cloud-builders/docker 
+    args: ['push', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$TAG_NAME']
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk 
+    entrypoint: gcloud 
+    args: [ 'run','deploy','${_SERVICE}', '--image','${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$TAG_NAME', '--platform','managed', '--region','${_REGION}', '--allow-unauthenticated', '--memory','2Gi', '--cpu','2', '--port','8080', '--max-instances','10' ] 
+  
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk 
+    entrypoint: bash 
+    args: [-lc,'URL=$(gcloud run services describe "${_SERVICE}" --region="${_REGION}" --format="value(status.url)");echo "Service URL: $${URL}"']
+  
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: bash
+    args: [-lc, 'set -e; gcloud run services add-iam-policy-binding "${_SERVICE}" --region="${_REGION}" --member=allUsers --role=roles/run.invoker || true']
+
+
+substitutions: 
+  _REGION: asia-northeast1 
+  _REPO: mock-v-828-repo
+  _SERVICE: mock-v-828-service
+
+options: 
+  logging: CLOUD_LOGGING_ONLY
