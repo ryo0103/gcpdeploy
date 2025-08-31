@@ -6,7 +6,33 @@
 
 ## 書き換える設定
 
-### GCPプロジェクト単位
+### marubeni-streamlitにデプロイする場合
+1. cloudbuild.yaml
+``` yaml
+serviceAccount: projects/marubeni-streamlit/serviceAccounts/cb-deployer@marubeni-streamlit.iam.gserviceaccount.com
+
+substitutions: 
+  _REGION: YOUR_REGION
+  _REPO: YOUR_ARTIFACT_REPOSITORY_NAME
+  _SERVICE: YOUR_CLOUD_RUN_SERVICE_NAME
+
+2. GitHub Variables
+``` yaml
+CLOUD_RUN_SERVICE: YOUR_CLOUD_RUN_SERVICE_NAME
+DEPLOY_SA: cb-deployer@marubeni-streamlit.iam.gserviceaccount.com
+PROJECT_ID: marubeni-streamlit
+PROJECT_NUMBER: 464938819289
+REGION: asia-northeast1
+WIF_PROVIDER: projects/464938819289/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+```
+
+3. GitHub Secrets
+``` yaml
+GH_ADMIN_TOKEN: YOUR_GITHUB_ACESS_TOKEN (used to update url in "About")
+```
+
+### それ以外のGCPプロジェクトにデプロイする場合
+#### GCPプロジェクト単位
 1. cloudbuild.yaml
 ``` yaml
 serviceAccount: projects/YOUR_PROJECT_ID/serviceAccounts/cb-deployer@YOUR_PROJECT_ID.iam.gserviceaccount.com
@@ -17,12 +43,12 @@ substitutions:
 ```
 
 
-### GitHub Repository単位
+#### GitHub Repository単位
 1. cloudbuild.yaml
 ``` yaml
 substitutions: 
-  _SERVICE: YOUR_CLOUD_RUN_SERVICE_NAME
   _REPO: YOUR_ARTIFACT_REPOSITORY_NAME
+  _SERVICE: YOUR_CLOUD_RUN_SERVICE_NAME
 ```
 
 2. GitHub Variables
@@ -37,4 +63,5 @@ WIF_PROVIDER: projects/YOUR_PROJECT_NUMBER/locations/global/workloadIdentityPool
 3. GitHub Secrets
 ``` yaml
 GH_ADMIN_TOKEN: YOUR_GITHUB_ACESS_TOKEN (used to update url in "About")
+
 ```
