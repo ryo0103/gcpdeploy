@@ -6,7 +6,6 @@
 
 ## 書き換える設定
 
-### marubeni-streamlitにデプロイする場合
 #### 変数名説明 <br>
 **TokenはSecretsに置いてください**
 ```
@@ -31,3 +30,4 @@ CLOUD_RUN_SERVICE: YOUR_CLOUD_RUN_SERVICE_NAME
 ``` yaml
 GH_ADMIN_TOKEN: GITHUB_ACESS_TOKEN (used to update url in "About")
 ```
+
