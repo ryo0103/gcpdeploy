@@ -1,4 +1,4 @@
-serviceAccount: projects/YOUR_PROJECT_ID/serviceAccounts/cb-deployer@YOUR_PROJECT_ID.iam.gserviceaccount.com
+serviceAccount: projects/marubeni-streamlit/serviceAccounts/cb-deployer@marubeni-streamlit.iam.gserviceaccount.com
 
 steps:
   - name: gcr.io/cloud-builders/docker 
@@ -25,10 +25,11 @@ steps:
 
 
 substitutions: 
-  _REGION: YOUR_REGION
+  _REGION: asia-northeast1
   _REPO: YOUR_ARTIFACT_REPOSITORY_NAME
   _SERVICE: YOUR_CLOUD_RUN_SERVICE_NAME
 
 options: 
   logging: CLOUD_LOGGING_ONLY
+
 
