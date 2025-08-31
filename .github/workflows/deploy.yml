@@ -1,10 +1,10 @@
 name: Deploy via Cloud Build
 
 env:
-  PROJECT_ID: ${{vars.GCP_PROJECT_ID}}
-  PROJECT_NUMBER: ${{vars.GCP_PROJECT_NUMBER}}
-  WIF_PROVIDER: ${{vars.WIF_PROVIDER}}
-  DEPLOY_SA: ${{vars.DEPLOY_SA}}
+  PROJECT_ID: marubeni-streamlit
+  PROJECT_NUMBER: 464938819289
+  WIF_PROVIDER: projects/464938819289/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+  DEPLOY_SA: cb-deployer@marubeni-streamlit.iam.gserviceaccount.com
 
 on:
   workflow_dispatch:
@@ -50,7 +50,7 @@ jobs:
       
       - name: Get Cloud Run URL
         run: |
-          URL=$(gcloud run services describe "${{vars.CLOUD_RUN_SERVICE}}" --region="${{vars.REGION}}" --format='value(status.url)')
+          URL=$(gcloud run services describe "${{vars.CLOUD_RUN_SERVICE}}" --region="asia-northeast1" --format='value(status.url)')
           echo "URL=$URL" >> "$GITHUB_ENV"
           
       - name: update Github About URL
@@ -58,3 +58,4 @@ jobs:
         env: 
           GH_TOKEN: ${{secrets.GH_ADMIN_TOKEN}}
         run: gh repo edit "${{github.repository}}" --homepage "${URL}"
+
