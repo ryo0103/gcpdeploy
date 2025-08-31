@@ -1,4 +1,4 @@
-serviceAccount: projects/actions-mock-828/serviceAccounts/cb-deployer@actions-mock-828.iam.gserviceaccount.com
+serviceAccount: projects/YOUR_PROJECT_ID/serviceAccounts/cb-deployer@YOUR_PROJECT_ID.iam.gserviceaccount.com
 
 steps:
   - name: gcr.io/cloud-builders/docker 
@@ -25,9 +25,10 @@ steps:
 
 
 substitutions: 
-  _REGION: asia-northeast1 
-  _REPO: mock-v-828-repo
-  _SERVICE: mock-v-828-service
+  _REGION: YOUR_REGION
+  _REPO: YOUR_ARTIFACT_REPOSITORY_NAME
+  _SERVICE: YOUR_CLOUD_RUN_SERVICE_NAME
 
 options: 
   logging: CLOUD_LOGGING_ONLY
+
