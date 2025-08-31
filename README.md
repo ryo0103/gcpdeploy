@@ -44,7 +44,7 @@ GH_ADMIN_TOKEN: GITHUB_ACESS_TOKEN (used to update url in "About")
 
 ### それ以外のGCPプロジェクトにデプロイする場合
 #### 前提
-サービスアカウントに対する権限付与やWIFの設定等を、streamlitと同様に事前に行う必要があります。
+サービスアカウントに対する権限付与やWIFの設定等を、marubeni-streamlitと同様に事前に行う必要があります。
 
 #### GCPプロジェクト単位
 #### 1. cloudbuild.yaml
@@ -78,4 +78,5 @@ WIF_PROVIDER: projects/YOUR_PROJECT_NUMBER/locations/global/workloadIdentityPool
 ``` yaml
 GH_ADMIN_TOKEN: YOUR_GITHUB_ACESS_TOKEN (used to update url in "About")
 ```
+
 
