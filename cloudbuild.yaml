@@ -17,16 +17,15 @@ steps:
       - -lc
       - |
         set -e
-        BUCKET="${_GCS_BUCKET_NAME}"
         LOCATION="${_REGION}"
 
-        echo "Check GCS bucket exists: gs://$BUCKET in $LOCATION"
+        echo "Check GCS bucket exists: gs://${_GCS_BUCKET_NAME} in $LOCATION"
 
-        if gsutil ls -b "gs://$BUCKET" >/dev/null 2>&1; then
+        if gsutil ls -b "gs://${_GCS_BUCKET_NAME}" >/dev/null 2>&1; then
           echo "Bucket already exists."
           else
           echo "Bucket not found."
-          gsutil mb -l "$LOCATION" "gs://$BUCKET"
+          gsutil mb -l "$LOCATION" "gs://${_GCS_BUCKET_NAME}"
         fi
 
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk 
