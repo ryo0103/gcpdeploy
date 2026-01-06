@@ -1,4 +1,4 @@
-serviceAccount: projects/marubeni-streamlit/serviceAccounts/cb-deployer@marubeni-streamlit.iam.gserviceaccount.com
+serviceAccount: projects/gcp-deploy-mock0106/serviceAccounts/cb-deployer@gcp-deploy-mock0106.iam.gserviceaccount.com
 
 steps:
   - name: gcr.io/cloud-builders/docker 
@@ -10,6 +10,24 @@ steps:
 
   - name: gcr.io/cloud-builders/docker 
     args: ['push', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$TAG_NAME']
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: bash
+    args: 
+      - -lc
+      - |
+        set -e
+        BUCKET="${_GCS_BUCKET_NAME}"
+        LOCATION="${_REGION}"
+
+        echo "Check GCS bucket exists: gs://$BUCKET in $LOCATION"
+
+        if gsutil ls -b "gs://$BUCKET" >/dev/null 2>&1; then
+          echo "Bucket already exists."
+          else
+          echo "Bucket not found."
+          gsutil mb -l "$LOCATION" "gs://$BUCKET"
+        fi
 
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk 
     entrypoint: gcloud 
@@ -26,8 +44,9 @@ steps:
 
 substitutions: 
   _REGION: asia-northeast1
-  _REPO: YOUR_ARTIFACT_REPOSITORY_NAME
-  _SERVICE: YOUR_CLOUD_RUN_SERVICE_NAME
+  _REPO: gcp-deploy-mock0106-repo
+  _SERVICE: gcp-deploy-mock0106-service
+  _GCS_BUCKET_NAME: gcp-deploy-mock0106-bucket
 
 options: 
   logging: CLOUD_LOGGING_ONLY

@@ -1,10 +1,10 @@
 name: Deploy via Cloud Build
 
 env:
-  PROJECT_ID: marubeni-streamlit
-  PROJECT_NUMBER: 464938819289
-  WIF_PROVIDER: projects/464938819289/locations/global/workloadIdentityPools/github-pool/providers/github-provider
-  DEPLOY_SA: cb-deployer@marubeni-streamlit.iam.gserviceaccount.com
+  PROJECT_ID: gcp-deploy-mock0106
+  PROJECT_NUMBER: 694474841040
+  WIF_PROVIDER: projects/694474841040/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+  DEPLOY_SA: cb-deployer@gcp-deploy-mock0106.iam.gserviceaccount.com
 
 on:
   workflow_dispatch:
