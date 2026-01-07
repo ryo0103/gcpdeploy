@@ -1,8 +1,8 @@
 import streamlit as st
 from google.cloud import storage as gcs
 
-st.title("GCS テスト")
-project_id = "gcp-deploy-mock0106"
+st.title("GCS Mock")
 uploaded = st.file_uploader("ファイルを選択")
 client = gcs.Client()
-[print(bucket) for bucket in client.list_buckets()]
+print(len(client.list_buckets()))
+print(client.list_buckets())
