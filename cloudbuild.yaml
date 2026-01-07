@@ -28,7 +28,7 @@ steps:
 
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk 
     entrypoint: gcloud 
-    args: [ 'run','deploy','${_SERVICE}', '--image','${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$TAG_NAME', '--platform','managed', '--region','${_REGION}', '--allow-unauthenticated', '--memory','2Gi', '--cpu','2', '--port','8080', '--max-instances','10' ] 
+    args: [ 'run','deploy','${_SERVICE}', '--image','${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$TAG_NAME', '--platform','managed', '--region','${_REGION}', '--allow-unauthenticated', '--memory','2Gi', '--cpu','2', '--port','8080', '--max-instances','10', '--set-env-vars','GCS_BUCKET_NAME=${_GCS_BUCKET_NAME}'] 
   
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk 
     entrypoint: bash 
