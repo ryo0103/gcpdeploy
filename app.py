@@ -5,9 +5,8 @@ gcs = GCSWrapper()
 uploaded = st.file_uploader("アップロードするファイルを選択")
 
 if uploaded is not None:
-    gcs.upload(uploaded,uploaded.name)
-    for s in gcs.get_file_names():
-        st.write(s)
+    if st.button("GCSにアップロード"):
+        gcs.upload(uploaded,uploaded.name)
 
 names = gcs.get_file_names()
 if not names:

@@ -11,11 +11,11 @@ class GCSWrapper:
         return [file.name for file in self._client.list_blobs(self._bucket)]
     
     def upload(self,file,file_name):
-        gcs_path = f"{file_name}"
+        gcs_path = file_name
         blob = self._bucket.blob(gcs_path)
         blob.upload_from_file(file, rewind=True)
     
     def download(self,file_name):
-        gcs_path = f"{file_name}"
+        gcs_path = file_name
         blob = self._bucket.blob(gcs_path)
         return blob.download_as_bytes()
