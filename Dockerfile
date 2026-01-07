@@ -25,7 +25,7 @@ EXPOSE 8080
 HEALTHCHECK CMD curl --fail http://localhost:8080/_stcore/health
 
 # Streamlitアプリを起動（Cloud Run向けに最適化）
-ENTRYPOINT ["streamlit", "run", "examples/app.py", \
+ENTRYPOINT ["streamlit", "run", "app.py", \
     "--server.port=8080", \
     "--server.address=0.0.0.0", \
     "--server.headless=true", \
