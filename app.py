@@ -4,7 +4,7 @@ from GCSWrapper import GCSWrapper
 gcs = GCSWrapper()
 uploaded = st.file_uploader("アップロードするファイルを選択")
 
-if uploaded is not None:
+if uploaded:
     if st.button("GCSにアップロード"):
         gcs.upload(uploaded,uploaded.name)
 
