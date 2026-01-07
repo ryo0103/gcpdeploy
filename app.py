@@ -1,10 +1,9 @@
 import streamlit as st
-from gcs_client import upload_bytes, download_bytes
+from google.cloud import storage as gcs
 
-st.title("GCS ファイルアップロード")
-
+st.title("GCS テスト")
+project_id = "gcp-deploy-mock0106"
 uploaded = st.file_uploader("ファイルを選択")
 if uploaded is not None:
-    dest_path = f"uploads/{uploaded.name}"
-    upload_bytes(dest_path, uploaded.read(), content_type=uploaded.type)
-    st.success(f"アップロード完了: {dest_path}")
+    client = gcs.Client(project_id)
+    [print(bucket.name) for bucket in client.list_buckets()]

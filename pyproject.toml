@@ -11,4 +11,5 @@ dependencies = [
     "matplotlib",
     "japanize-matplotlib",
     "openpyxl",
+    "google-cloud-storage",
 ]
